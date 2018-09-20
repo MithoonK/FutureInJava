@@ -1,9 +1,23 @@
 import java.util.concurrent.*;
-
+//Runnable has no return type
 public class Test {
-    public static void main(String [] args) throws ExecutionException, InterruptedException {
-        CompletableFuture<String> completableFuture =  new CompletableFuture<String>();
-        completableFuture.get();
-        System.out.println("At the end of the main function");
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("In the start of the run method of runnable");
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("In the end of the method inside run");
+            }
+        });
+
+        System.out.println("here");
+        System.out.println("printing the result of the future " + completableFuture.get());
+        System.out.println("at the end");
     }
+
 }
