@@ -10,8 +10,8 @@ public class Test {
             }
             System.out.println("Hello World");
             return "one";
-        }).thenAccept((arg)->{
-            System.out.println("The arg received is: " + arg);
+        }).thenRun(()->{
+            System.out.println("We cant receive any arg here");
         });
         System.out.println("Executing the main method");
         System.out.println("Priting the result of the completable future " + completableFuture.get());
