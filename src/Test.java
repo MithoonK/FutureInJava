@@ -20,9 +20,9 @@ public class Test {
             System.out.println("Inside completable future");
             return "Yes";
         });
-        CompletableFuture<CompletableFuture<Integer>> futureCompletableFuture = getUserName().thenApply((arg)->{
-           return getUserAge();
+        CompletableFuture<Integer> futureCompletableFuture = getUserName().thenCompose((arg)->{
+            return getUserAge();
         });
-        System.out.println(futureCompletableFuture.get().get());
+        System.out.println("Final outcome " + futureCompletableFuture.get());
     }
 }
