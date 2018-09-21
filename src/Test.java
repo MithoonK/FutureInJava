@@ -2,7 +2,7 @@ import java.util.concurrent.*;
 //Runnable has no return type
 public class Test {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(()->{
+        CompletableFuture<Void> completableFuture = CompletableFuture.supplyAsync(()->{
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
@@ -10,10 +10,8 @@ public class Test {
             }
             System.out.println("Hello World");
             return "one";
-        }).thenApply((arg)->{
-            return arg + " two";
-        }).thenApply((arg)->{
-            return arg +" three";
+        }).thenAccept((arg)->{
+            System.out.println("The arg received is: " + arg);
         });
         System.out.println("Executing the main method");
         System.out.println("Priting the result of the completable future " + completableFuture.get());
