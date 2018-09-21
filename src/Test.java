@@ -1,20 +1,28 @@
 import java.util.concurrent.*;
 //Runnable has no return type
 public class Test {
+
+    public static CompletableFuture<String> getUserName() {
+        return CompletableFuture.supplyAsync(()->{
+            System.out.println("Inside the name task");
+           return "name";
+        });
+    }
+
+    public static CompletableFuture<Integer> getUserAge() {
+        return CompletableFuture.supplyAsync(()->{
+            System.out.println("Inside the age task");
+            return 20;
+        });
+    }
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(()->{
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                throw new IllegalStateException(e);
-            }
-            System.out.println("Hello World");
-            return "one";
-        }).thenApplyAsync((arg)->{
-            return "The arg is: " + arg;
+            System.out.println("Inside completable future");
+            return "Yes";
         });
-        System.out.println("Executing the main method");
-        System.out.println("Priting the result of the completable future " + completableFuture.get());
-        System.out.println("Completed the main method   ");
+        CompletableFuture<CompletableFuture<Integer>> futureCompletableFuture = getUserName().thenApply((arg)->{
+           return getUserAge();
+        });
+        System.out.println(futureCompletableFuture.get().get());
     }
 }
