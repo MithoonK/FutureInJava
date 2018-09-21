@@ -11,7 +11,7 @@ public class Test {
             System.out.println("Hello World");
         });
         System.out.println("Executing the main method");
-        System.out.println("Priting the result of the completable future ");
+        System.out.println("Priting the result of the completable future " + completableFuture.get());
         System.out.println("Completed the main method   ");
     }
 }
