@@ -1,51 +1,38 @@
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
+
 //Runnable has no return type
 public class Test {
 
-    public static CompletableFuture<String> getUserName() {
+    public static CompletableFuture<Integer> processData(Integer i) {
         return CompletableFuture.supplyAsync(()->{
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Inside the name task");
-           return "name";
+            System.out.println("Inside the processData method");
+            return i;
         });
     }
 
-    public static CompletableFuture<Integer> getUserAge() {
-        return CompletableFuture.supplyAsync(()->{
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Inside the age task");
-            return 20;
-        });
-    }
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        CompletableFuture<Integer> completableFuture = CompletableFuture.supplyAsync(()->{
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return 20;
-        });
-        CompletableFuture<Integer>completableFuture1 = CompletableFuture.supplyAsync(()->{
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return 10;
-        });
+        List<Integer> data = Arrays.asList(1,2,3,4);
 
-        CompletableFuture<Integer> completableFuture2 = completableFuture1.thenCombine(completableFuture, (first, second )->{
-            return first * second;
+        List<CompletableFuture<Integer>> dataFutures = data.stream()
+                .map(datum -> processData(datum))
+                .collect(Collectors.toList());
+        for(int i = 0; i < dataFutures.size(); i++) {
+            System.out.println("Printing " + dataFutures.get(i).get());
+        }
+        CompletableFuture<Void> allFutures  = CompletableFuture.allOf(dataFutures.toArray(new CompletableFuture[dataFutures.size()]));
+        CompletableFuture<List<Integer>> allProcessedData = allFutures.thenApply((v)->{
+           return dataFutures.stream().map(datumFuture -> datumFuture.join()).collect(Collectors.toList());
         });
-        System.out.println("Printing the output " + completableFuture2.get() );
+        System.out.println("Printing the result of all the futures " + allProcessedData.get());
+        System.out.println("Hello");
+        System.out.println("Getting the result of all futures " + allFutures.get()) ;
     }
 }
