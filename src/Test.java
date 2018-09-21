@@ -3,35 +3,17 @@ import java.util.concurrent.*;
 public class Test {
 
     public static void main(String [] args) throws ExecutionException, InterruptedException {
+        int age = -1;
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(()->{
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (age < 0) {
+                throw new IllegalArgumentException("Age can not be negative");
+            } else {
+                return "ok";
             }
-            return "first future completed";
+        }).exceptionally(ex ->{
+            return "Exception";
         });
-
-        CompletableFuture<String> completableFuture1 = CompletableFuture.supplyAsync(()->{
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return "second future completed";
-        });
-
-        CompletableFuture<String> completableFuture2 = CompletableFuture.supplyAsync(()->{
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return "third future completed";
-        });
-
-        CompletableFuture<Object> completableFuture3 = CompletableFuture.anyOf(completableFuture, completableFuture1, completableFuture2);
-        System.out.println(completableFuture3.get());
+        System.out.println("Printing the outcome " + completableFuture.get());
     }
 
 
