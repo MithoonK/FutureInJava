@@ -7,5 +7,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="guice-3.0" level="application" />
+    <orderEntry type="library" name="reflections-0.9.10" level="application" />
+    <orderEntry type="library" name="guava" level="application" />
+    <orderEntry type="library" name="guava-15.0" level="application" />
+    <orderEntry type="library" name="javassist" level="application" />
+    <orderEntry type="library" name="javax-inject" level="application" />
+    <orderEntry type="library" name="aopalliance-" level="application" />
   </component>
 </module>

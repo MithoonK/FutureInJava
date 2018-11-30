@@ -1,25 +1,46 @@
-import java.util.concurrent.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 
 public class Test {
-
-    public static void main(String [] args) throws ExecutionException, InterruptedException {
-        int age = 1;
-        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(()->{
-            if (age < 0) {
-                throw new IllegalArgumentException("Age can not be negative");
-            } else {
-                return "ok";
-            }
-        }).handle((res, ex) ->{
-            if (res == null) {
-                return "Exception occured";
-            } else {
-                return "no exception";
-            }
-        });
-        System.out.println("Printing the outcome " + completableFuture.get());
+    public static void main(String[] args) {
+        Injector injector = Guice.createInjector(new TextEditorModule());
+        TextEditor editor = injector.getInstance(TextEditor.class);
+        editor.makeSpellCheck();
     }
+}
+class TextEditor {
+    private SpellChecker spellChecker;
 
+    @Inject
+    public TextEditor(SpellChecker spellChecker) {
+        this.spellChecker = spellChecker;
+    }
+    public void makeSpellCheck() {
+        spellChecker.checkSpelling();
+    }
+}
 
+//Binding Module
+class TextEditorModule extends AbstractModule {
+    @Override
 
+    protected void configure() {
+        bind(SpellChecker.class).to(SpellCheckerImpl.class);
+    }
+}
+
+//spell checker interface
+interface SpellChecker {
+    public void checkSpelling();
+}
+
+//spell checker implementation
+class SpellCheckerImpl implements SpellChecker {
+    @Override
+
+    public void checkSpelling() {
+        System.out.println("Inside checkSpelling." );
+    }
 }
